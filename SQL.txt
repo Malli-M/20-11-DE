@@ -1,0 +1,41 @@
+1) Find the employees whose salary is more than their salary:
+
+Select e.empname, m.empname, e.salary, m.salary
+from emp e 
+inner join emp m on e.empid=m.empid 
+where e.empname > m.empname
+
+
+============
+
+
+2)
+
+WITH cte AS (
+    SELECT teams, COUNT(1) AS no_of_matches
+    FROM (
+        SELECT team_1 AS teams FROM icc_world_cup
+        UNION ALL
+        SELECT team_2 AS teams FROM icc_world_cup
+    ) a
+    GROUP BY teams
+)
+
+SELECT 
+    a.teams,
+    a.no_of_matches,
+    COUNT(b.winner) AS total_matches_won,
+    a.no_of_matches - COUNT(b.winner) AS total_matches_lost
+FROM 
+    cte a 
+LEFT JOIN 
+    icc_world_cup b 
+ON 
+    a.teams = b.winner
+GROUP BY 
+    a.teams, a.no_of_matches
+ORDER BY 
+    total_matches_won;
+
+
+=========================
